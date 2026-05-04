@@ -109,6 +109,7 @@ public APLRes AskPluginLoad2(Handle myPlugin, bool late, char[] error, int err_m
 
 	CreateNative("GetOutputFormatted", Native_GetOutputFormatted);
 	CreateNative("GetOutputNames", Native_GetOutputNames);
+	return APLRes_Success;
 }
 
 int Native_GetOutputCount(Handle plugin, int params)
@@ -600,14 +601,14 @@ float GetOutputValueFloat(int entity, const char[] output, bool isVector = false
 		{
 			if (!isVector)
 			{
-				return LoadFromAddress(outputAddr + Union_Val_offset, NumberType_Int32);
+				return view_as<float>(LoadFromAddress(outputAddr + Union_Val_offset, NumberType_Int32));
 			}
 			else
 			{
 				Address baseAddr = outputAddr + Union_Val_offset;
-				vec[0] = LoadFromAddress(baseAddr + view_as<Address>(0x0), NumberType_Int32);
-				vec[1] = LoadFromAddress(baseAddr + view_as<Address>(0x4), NumberType_Int32);
-				vec[2] = LoadFromAddress(baseAddr + view_as<Address>(0x8), NumberType_Int32);
+				vec[0] = view_as<float>(LoadFromAddress(baseAddr + view_as<Address>(0x0), NumberType_Int32));
+				vec[1] = view_as<float>(LoadFromAddress(baseAddr + view_as<Address>(0x4), NumberType_Int32));
+				vec[2] = view_as<float>(LoadFromAddress(baseAddr + view_as<Address>(0x8), NumberType_Int32));
 				return 1.0;
 			}
 		}
@@ -632,7 +633,7 @@ int GetOutputValueString(int entity, const char[] output, char[] value, int maxl
 	 		FIELD_MODELNAME,
 		 	FIELD_SOUNDNAME:
 		{
-			return StringtToCharArray(outputAddr + Union_Val_offset, value, maxlen, true);
+			return StringtToCharArray(LoadFromAddress(outputAddr + Union_Val_offset, NumberType_Int32), value, maxlen, true);
 		}
 	}
 

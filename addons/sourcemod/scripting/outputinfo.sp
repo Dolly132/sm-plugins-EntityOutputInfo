@@ -85,7 +85,7 @@ Handle g_hGetDataDescMap;
 public Plugin myinfo =
 {
 	name		= "OutputInfo",
-	author		= "Botox, Addie, Dolly, .Rushaway)",
+	author		= "Botox, Addie, Dolly, .Rushaway",
 	description	= "Read entity outputs",
 	version		= "1.0.1",
 	url			= "https://nide.gg"

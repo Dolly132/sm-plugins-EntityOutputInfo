@@ -181,7 +181,7 @@ int Native_GetOutputParameter(Handle plugin, int params)
 	char[] parameter = new char[maxlen];
 	GetNativeString(4, parameter, maxlen);
 
-	int len = GetOutputTargetInput(entity, output, index, parameter, maxlen);
+	int len = GetOutputParameter(entity, output, index, parameter, maxlen);
 	if (len)
 	{
 		SetNativeString(4, parameter, maxlen);

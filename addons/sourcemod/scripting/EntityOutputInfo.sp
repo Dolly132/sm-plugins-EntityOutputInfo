@@ -39,43 +39,43 @@
  */
 enum
 {
-    FIELD_VOID = 0,                 // No type or value
-    FIELD_FLOAT,                    // Any floating point value
-    FIELD_STRING,                   // A string ID (returned from ALLOC_STRING)
-    FIELD_VECTOR,                   // Any vector, QAngle, or AngularImpulse
-    FIELD_QUATERNION,               // A quaternion
-    FIELD_INTEGER,                  // Any integer or enum
-    FIELD_BOOLEAN,                  // Boolean, implemented as an int
-    FIELD_SHORT,                    // 2-byte integer
-    FIELD_CHARACTER,                // A single byte
-    FIELD_COLOR32,                  // 8-bit per channel RGBA (32-bit color)
-    FIELD_EMBEDDED,                 // Embedded object with a datadesc; recursively traversed
-    FIELD_CUSTOM,                   // Special type with function pointers for read/write/parse
+	FIELD_VOID = 0,                 // No type or value
+	FIELD_FLOAT,                    // Any floating point value
+	FIELD_STRING,                   // A string ID (returned from ALLOC_STRING)
+	FIELD_VECTOR,                   // Any vector, QAngle, or AngularImpulse
+	FIELD_QUATERNION,               // A quaternion
+	FIELD_INTEGER,                  // Any integer or enum
+	FIELD_BOOLEAN,                  // Boolean, implemented as an int
+	FIELD_SHORT,                    // 2-byte integer
+	FIELD_CHARACTER,                // A single byte
+	FIELD_COLOR32,                  // 8-bit per channel RGBA (32-bit color)
+	FIELD_EMBEDDED,                 // Embedded object with a datadesc; recursively traversed
+	FIELD_CUSTOM,                   // Special type with function pointers for read/write/parse
 
-    FIELD_CLASSPTR,                 // CBaseEntity*
-    FIELD_EHANDLE,                  // Entity handle
-    FIELD_EDICT,                    // edict_t*
+	FIELD_CLASSPTR,                 // CBaseEntity*
+	FIELD_EHANDLE,                  // Entity handle
+	FIELD_EDICT,                    // edict_t*
 
-    FIELD_POSITION_VECTOR,          // World coordinate (fixed up across level transitions)
-    FIELD_TIME,                     // Floating point time (fixed up automatically)
-    FIELD_TICK,                     // Integer tick count (fixed up similarly to time)
-    FIELD_MODELNAME,                // Engine string representing a model name (needs precache)
-    FIELD_SOUNDNAME,                // Engine string representing a sound name (needs precache)
+	FIELD_POSITION_VECTOR,          // World coordinate (fixed up across level transitions)
+	FIELD_TIME,                     // Floating point time (fixed up automatically)
+	FIELD_TICK,                     // Integer tick count (fixed up similarly to time)
+	FIELD_MODELNAME,                // Engine string representing a model name (needs precache)
+	FIELD_SOUNDNAME,                // Engine string representing a sound name (needs precache)
 
-    FIELD_INPUT,                    // List of input data fields (derived from CMultiInputVar)
-    FIELD_FUNCTION,                 // Class function pointer (Think, Use, etc.)
+	FIELD_INPUT,                    // List of input data fields (derived from CMultiInputVar)
+	FIELD_FUNCTION,                 // Class function pointer (Think, Use, etc.)
 
-    FIELD_VMATRIX,                  // VMatrix (output coords are NOT worldspace)
-    FIELD_VMATRIX_WORLDSPACE,       // VMatrix mapping local space to world space (translation fixed up on level transitions)
-    FIELD_MATRIX3X4_WORLDSPACE,     // matrix3x4_t mapping local space to world space (translation fixed up on level transitions)
+	FIELD_VMATRIX,                  // VMatrix (output coords are NOT worldspace)
+	FIELD_VMATRIX_WORLDSPACE,       // VMatrix mapping local space to world space (translation fixed up on level transitions)
+	FIELD_MATRIX3X4_WORLDSPACE,     // matrix3x4_t mapping local space to world space (translation fixed up on level transitions)
 
-    FIELD_INTERVAL,                 // Start and range floating point interval (e.g. 3.2->3.6 == 3.2 and 0.4)
-    FIELD_MODELINDEX,               // A model index
-    FIELD_MATERIALINDEX,            // A material index (using the material precache string table)
+	FIELD_INTERVAL,                 // Start and range floating point interval (e.g. 3.2->3.6 == 3.2 and 0.4)
+	FIELD_MODELINDEX,               // A model index
+	FIELD_MATERIALINDEX,            // A material index (using the material precache string table)
 
-    FIELD_VECTOR2D,                 // 2D vector (2 floats)
+	FIELD_VECTOR2D,                 // 2D vector (2 floats)
 
-    FIELD_TYPECOUNT,                // MUST BE LAST
+	FIELD_TYPECOUNT,                // MUST BE LAST
 };
 
 Handle g_hDeleteElement;
@@ -86,7 +86,7 @@ public Plugin myinfo =
 	name		= "Entity Output Info",
 	author		= "Botox, Addie, Dolly, .Rushaway",
 	description	= "Advanced entity output manipulation API",
-	version		= "1.1.0",
+	version		= "1.2.0",
 	url			= "https://github.com/srcdslab"
 };
 
@@ -430,6 +430,26 @@ public void OnPluginStart()
 	}
 }
 
+void GetEntityName(int entity, char[] buffer, int maxlen)
+{
+	int offset = FindDataMapInfo(entity, "m_iName");
+	if (offset != -1)
+	{
+		Address nameAddr = GetEntityAddress(entity) + view_as<Address>(offset);
+		Address strPtr = LoadFromAddress(nameAddr, NumberType_Int32);
+
+		if (strPtr != Address_Null)
+		{
+			StringtToCharArray(strPtr, buffer, maxlen, true);
+			if (buffer[0] != '\0')
+				return;
+		}
+	}
+
+	int ref = EntIndexToEntRef(entity);
+	FormatEx(buffer, maxlen, "#%d", ref);
+}
+
 Address GetActionAtIndex(Address outputAddr, int index)
 {
 	Address actionList = GetOutputActionList(outputAddr);
@@ -570,7 +590,9 @@ int GetOutputValue(int entity, const char[] output)
 		}
 	}
 
-	ThrowError("Entity '%X': %s value is not an integer (%d)", GetEntityAddress(entity), output, fieldType);
+	char entityName[64];
+	GetEntityName(entity, entityName, sizeof(entityName));
+	ThrowError("Entity '%s': %s value is not an integer (%d)", entityName, output, fieldType);
 	return 0;
 }
 
@@ -600,7 +622,9 @@ float GetOutputValueFloat(int entity, const char[] output, bool isVector = false
 		}
 	}
 
-	ThrowError("Entity '%X': %s value is not a float (%d)", GetEntityAddress(entity), output, fieldType);
+	char entityName[64];
+	GetEntityName(entity, entityName, sizeof(entityName));
+	ThrowError("Entity '%s': %s value is not a float (%d)", entityName, output, fieldType);
 	return 0.0;
 }
 
@@ -619,7 +643,9 @@ int GetOutputValueString(int entity, const char[] output, char[] value, int maxl
 		}
 	}
 
-	ThrowError("Entity '%X': %s value is not a string (%d)", GetEntityAddress(entity), output, fieldType);
+	char entityName[64];
+	GetEntityName(entity, entityName, sizeof(entityName));
+	ThrowError("Entity '%s': %s value is not a string (%d)", entityName, output, fieldType);
 	return 0;
 }
 

@@ -1,30 +1,30 @@
 "Games"
 {
-	"#default"
-	{
-		"#supported"
-		{
-			"game"		"cstrike"
-		}
+    "#default"
+    {
+        "#supported"
+        {
+            "game"    "cstrike"
+        }
 
-		"Signatures"
-		{
-			"CEventAction__operator_delete"
-			{
-				"library"		"server"
-				"linux"			"@_ZN12CEventActiondlEPv"
-				"windows"		"\x55\x8B\xEC\x8B\x55\x08\x85\xD2\x74\x0B\x8B\x41\x10\xFF\x49\x0C"
-			}
-		}
+        "Signatures"
+        {
+            "CEventAction__operator_delete"
+            {
+                "library"    "server"
+                "linux"      "@_ZN12CEventActiondlEPv"
+                "windows"    "\x55\x8B\xEC\x8B\x55\x08\x85\xD2\x74\x0B\x8B\x41\x10\xFF\x49\x0C"
+            }
+        }
 
-		"Offsets"
-		{
-			"CBaseEntity_GetDataDescMap"
-			{
-				"library"		"server"
-				"linux"			"12"
-				"windows"		"11"
-			}
-		}
-	}
+        "Offsets"
+        {
+            "CBaseEntity_GetDataDescMap"
+            {
+                "library"    "server"
+                "linux"      "12"
+                "windows"    "11"
+            }
+        }
+    }
 }

@@ -115,6 +115,11 @@ public APLRes AskPluginLoad2(Handle myPlugin, bool late, char[] error, int err_m
 int Native_GetOutputCount(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -125,11 +130,21 @@ int Native_GetOutputCount(Handle plugin, int params)
 int Native_GetOutputTarget(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	int maxlen = GetNativeCell(5);
 
@@ -148,11 +163,21 @@ int Native_GetOutputTarget(Handle plugin, int params)
 int Native_GetOutputTargetInput(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	int maxlen = GetNativeCell(5);
 
@@ -171,11 +196,21 @@ int Native_GetOutputTargetInput(Handle plugin, int params)
 int Native_GetOutputParameter(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	int maxlen = GetNativeCell(5);
 
@@ -194,11 +229,21 @@ int Native_GetOutputParameter(Handle plugin, int params)
 any Native_GetOutputDelay(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	return GetOutputDelay(entity, output, index);
 }
@@ -206,11 +251,21 @@ any Native_GetOutputDelay(Handle plugin, int params)
 int Native_GetOutputRefires(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	return GetOutputRefires(entity, output, index);
 }
@@ -218,6 +273,11 @@ int Native_GetOutputRefires(Handle plugin, int params)
 int Native_GetOutputValue(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -228,6 +288,11 @@ int Native_GetOutputValue(Handle plugin, int params)
 any Native_GetOutputValueFloat(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -238,6 +303,11 @@ any Native_GetOutputValueFloat(Handle plugin, int params)
 int Native_GetOutputValueString(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -259,6 +329,11 @@ int Native_GetOutputValueString(Handle plugin, int params)
 int Native_GetOutputValueVector(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -278,11 +353,21 @@ int Native_GetOutputValueVector(Handle plugin, int params)
 int Native_FindOutput(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int startIndex = GetNativeCell(3);
+	if (startIndex < 0)
+	{
+		ThrowError("StartIndex '%d' is invalid.", startIndex);
+		return 0;
+	}
 
 	char target[256];
 	GetNativeString(4, target, sizeof(target));
@@ -302,6 +387,11 @@ int Native_FindOutput(Handle plugin, int params)
 int Native_DeleteOutput(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -314,6 +404,11 @@ int Native_DeleteOutput(Handle plugin, int params)
 int Native_DeleteAllOutputs(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -324,11 +419,21 @@ int Native_DeleteAllOutputs(Handle plugin, int params)
 int Native_GetOutputFormatted(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	int maxlen = GetNativeCell(5);
 
@@ -347,8 +452,18 @@ int Native_GetOutputFormatted(Handle plugin, int params)
 int Native_GetOutputNames(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
+	if (!IsValidEntity(entity))
+	{
+		ThrowError("Entity '%d' is invalid.", entity);
+		return 0;
+	}
 
 	int index = GetNativeCell(2);
+	if (index < 0)
+	{
+		ThrowError("Index '%d' is invalid.", index);
+		return 0;
+	}
 
 	int maxlen = GetNativeCell(4);
 

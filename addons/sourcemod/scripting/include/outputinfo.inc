@@ -1,205 +1,227 @@
-#if defined _OUTPUTINFO_included
- #endinput
+#if defined _outputinfo_included
+    #endinput
 #endif
-#define _OUTPUTINFO_included
+#define _outputinfo_included
 
-/*
- * Retrieves the number of elements of the given output.
+/**
+ * Returns the number of actions registered for the given output.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
+ * @param entity        Entity index.
+ * @param output        Output property name.
  *
- * @return					The number of elements of the given output.
+ * @return              Number of actions, or 0 if the output does not exist.
  */
 native int GetOutputCount(int entity, const char[] output);
 
-/*
- * Retrieves the target name of the given output at specific index. (Use FindOutput to get the index)
+/**
+ * Retrieves the target name of an output action at the given index.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
- * @param target			The buffer to store the target name in.
- * @param maxlen			The maximum length of the outgiven buffer.
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
+ * @param target        Buffer to store the target name.
+ * @param maxlen        Maximum length of the output buffer.
  *
- * @return					The number of bytes written to buffer.
+ * @return              Number of bytes written to the buffer.
  */
 native int GetOutputTarget(int entity, const char[] output, int index, char[] target, int maxlen);
 
-/*
- * Retrieves the target input of the given output at specific index. (Use FindOutput to get the index)
+/**
+ * Retrieves the target input of an output action at the given index.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
- * @param targetInput		The buffer to store the target input in.
- * @param maxlen			The maximum length of the outgiven buffer.
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
+ * @param targetInput   Buffer to store the target input.
+ * @param maxlen        Maximum length of the output buffer.
  *
- * @return					The number of bytes written to buffer.
+ * @return              Number of bytes written to the buffer.
  */
 native int GetOutputTargetInput(int entity, const char[] output, int index, char[] targetInput, int maxlen);
 
-/*
- * Retrieves the parameter of the given output at specific index. (Use FindOutput to get the index)
+/**
+ * Retrieves the parameter of an output action at the given index.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
- * @param parameter			The buffer to store the parameter in.
- * @param maxlen			The maximum length of the outgiven buffer.
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
+ * @param parameter     Buffer to store the parameter.
+ * @param maxlen        Maximum length of the output buffer.
  *
- * @return					The number of bytes written to buffer.
+ * @return              Number of bytes written to the buffer.
  */
 native int GetOutputParameter(int entity, const char[] output, int index, char[] parameter, int maxlen);
 
-/*
- * Retrieves the delay of the given output at specific index. (Use FindOutput to get the index)
+/**
+ * Retrieves the delay of an output action at the given index.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
  *
- * @return					The delay value of the output.
+ * @return              Delay in seconds, or -1.0 if the output does not exist.
  */
 native float GetOutputDelay(int entity, const char[] output, int index);
 
-/*
- * Retrieves the refires count of the given output at specific index. (Use FindOutput to get the index)
+/**
+ * Retrieves the refire count of an output action at the given index.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
  *
- * @return					The refires value of the output.
+ * @return              Number of times the action will fire (-1 = infinite), or 0 on failure.
  */
 native int GetOutputRefires(int entity, const char[] output, int index);
 
-/*
- * Retrieves the output at given index with proper display.
+/**
+ * Retrieves a formatted string representation of an output action at the given index.
+ * Format: "target,targetInput,parameter,delay,timesToFire"
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
- * @param formatted			The buffer to store the formatted output in.
- * @param maxlen			The maximum length of the outgiven buffer.
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
+ * @param formatted     Buffer to store the formatted string.
+ * @param maxlen        Maximum length of the output buffer.
  *
- * @return					The number of bytes written to buffer.
+ * @return              Number of bytes written to the buffer.
  */
 native int GetOutputFormatted(int entity, const char[] output, int index, char[] formatted, int maxlen);
 
-/*
- * Retrieves the integer value of the given output.
+/**
+ * Retrieves the integer value stored in the given output.
+ * Throws a native error if the output value type is not an integer.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
+ * @param entity        Entity index.
+ * @param output        Output property name.
  *
- * @return					The value of the given output.
+ * @return              Integer value of the output.
  */
 native int GetOutputValue(int entity, const char[] output);
 
-/*
- * Retrieves the float value of the given output.
+/**
+ * Retrieves the float value stored in the given output.
+ * Throws a native error if the output value type is not a float.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
+ * @param entity        Entity index.
+ * @param output        Output property name.
  *
- * @return					The value of the given output.
+ * @return              Float value of the output.
  */
 native float GetOutputValueFloat(int entity, const char[] output);
 
-/*
- * Retrieves the string value of the given outpout.
+/**
+ * Retrieves the string value stored in the given output.
+ * Throws a native error if the output value type is not a string.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param buffer			The buffer to store the string value in.
- * @param maxlen			The maximum length of the outgiven buffer.
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param buffer        Buffer to store the string value.
+ * @param maxlen        Maximum length of the output buffer.
  *
- * @return					The number of bytes written to buffer.
+ * @return              Number of bytes written to the buffer.
  */
 native int GetOutputValueString(int entity, const char[] output, char[] buffer, int maxlen);
 
-/*
- * Retrieves the vector value of the given outpout.
+/**
+ * Retrieves the vector value stored in the given output.
+ * Throws a native error if the output value type is not a vector.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param vec				The vector array (float[3]).
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param vec           Float array of size 3 to store the vector.
  *
- * @return					True on success, false otherwise.
+ * @return              True on success, false otherwise.
  */
 native bool GetOutputValueVector(int entity, const char[] output, float vec[3]);
 
-/*
- * Retrieves the output index based on given rules.
+/**
+ * Searches for an output action matching the given criteria, starting from startIndex.
+ * Pass an empty string or default values to ignore a specific field.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param startIndex		Where should the iterations start from.
- * @param target			The target name to search for, or NULL_STRING to ignore.
- * @param targetInput		The target input to search for, or NULL_STRING to ignore.
- * @param parameter			The parameter to search for, or NULL_STRING to ignore.
- * @param delay				The delay value to search for, or -1.0 to ignore.
- * @param timesToFire		The number of refires to search for, or 0 to ignore.
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param startIndex    Index to start searching from.
+ * @param target        Target name to match, or NULL_STRING to ignore.
+ * @param targetInput   Target input to match, or NULL_STRING to ignore.
+ * @param parameter     Parameter to match, or NULL_STRING to ignore.
+ * @param delay         Delay value to match, or -1.0 to ignore.
+ * @param timesToFire   Refire count to match, or 0 to ignore.
  *
- * @return					The output index, -1 on failure.
+ * @return              Index of the matching action, or -1 if not found.
  */
 native int FindOutput(
-	int entity,
-	const char[] output,
-	int startIndex,
-	const char[] target = NULL_STRING,
-	const char[] targetInput = NULL_STRING,
-	const char[] parameter = NULL_STRING,
-	float delay = -1.0,
-	int timesToFire = 0
+    int entity,
+    const char[] output,
+    int startIndex,
+    const char[] target      = NULL_STRING,
+    const char[] targetInput = NULL_STRING,
+    const char[] parameter   = NULL_STRING,
+    float delay              = -1.0,
+    int timesToFire          = 0
 );
 
-/*
- * Delete the output at specific index. (Use FindOutput to get the index)
+/**
+ * Deletes the output action at the given index.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
- * @param index				The index of the output. (See FindOutput).
+ * @param entity        Entity index.
+ * @param output        Output property name.
+ * @param index         Action index. Use FindOutput() to locate a specific action.
  *
- * @return					True on success, false otherwise.
+ * @return              True on success, false otherwise.
  */
 native bool DeleteOutput(int entity, const char[] output, int index);
 
-/*
- * Delete all outputs from an entity.
+/**
+ * Deletes all actions registered for the given output.
  *
- * @param entity			The entity index.
- * @param output			The output property name.
+ * @param entity        Entity index.
+ * @param output        Output property name.
  *
- * @return					The number of outputs deleted.
+ * @return              Number of actions deleted.
  */
 native int DeleteAllOutputs(int entity, const char[] output);
 
+/**
+ * Retrieves the name of an output at the given index by iterating the entity's datamap.
+ *
+ * @param entity        Entity index.
+ * @param index         Output index in the datamap.
+ * @param output        Buffer to store the output name.
+ * @param maxlen        Maximum length of the output buffer.
+ *
+ * @return              Number of bytes written to the buffer.
+ */
+native int GetOutputNames(int entity, int index, char[] output, int maxlen);
+
 #if !defined REQUIRE_PLUGIN
-public void __pl_INTERFACE_SetNTVOptional()
+public void __pl_OUTPUTINFO_SetNTVOptional()
 {
-	MarkNativeAsOptional("GetOutputCount");
-	MarkNativeAsOptional("GetOutputTarget");
-	MarkNativeAsOptional("GetOutputTargetInput");
-	MarkNativeAsOptional("GetOutputParameter");
-	MarkNativeAsOptional("GetOutputDelay");
-	MarkNativeAsOptional("GetOutputRefires");
-	MarkNativeAsOptional("GetOutputFormatted");
-	MarkNativeAsOptional("FindOutput");
-	MarkNativeAsOptional("DeleteOutput");
-	MarkNativeAsOptional("DeleteAllOutputs");
-	MarkNativeAsOptional("GetOutputNames");
+    MarkNativeAsOptional("GetOutputCount");
+    MarkNativeAsOptional("GetOutputTarget");
+    MarkNativeAsOptional("GetOutputTargetInput");
+    MarkNativeAsOptional("GetOutputParameter");
+    MarkNativeAsOptional("GetOutputDelay");
+    MarkNativeAsOptional("GetOutputRefires");
+    MarkNativeAsOptional("GetOutputFormatted");
+    MarkNativeAsOptional("GetOutputValue");
+    MarkNativeAsOptional("GetOutputValueFloat");
+    MarkNativeAsOptional("GetOutputValueString");
+    MarkNativeAsOptional("GetOutputValueVector");
+    MarkNativeAsOptional("FindOutput");
+    MarkNativeAsOptional("DeleteOutput");
+    MarkNativeAsOptional("DeleteAllOutputs");
+    MarkNativeAsOptional("GetOutputNames");
 }
 #endif
 
 public SharedPlugin __pl_OUTPUTINFO =
 {
-	name = "outputinfo",
-	file = "outputinfo.smx",
+    name = "outputinfo",
+    file = "outputinfo.smx",
 #if defined REQUIRE_PLUGIN
-	required = 1,
+    required = 1,
 #else
-	required = 0,
+    required = 0,
 #endif
 };

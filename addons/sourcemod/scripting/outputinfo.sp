@@ -17,23 +17,23 @@
 #define typedescription_t_size	52
 
 // varianthax_t m_Value
-#define Union_Val_offset      	view_as<Address>(0x00)
-#define fieldType_var_offset    view_as<Address>(0x10)
+#define Union_Val_offset		view_as<Address>(0x00)
+#define fieldType_var_offset	view_as<Address>(0x10)
 
 
 // CBaseEntityOutput
-#define m_Value_offset        	view_as<Address>(0x00)
-#define m_ActionList_offset   	view_as<Address>(0x14)
+#define m_Value_offset			view_as<Address>(0x00)
+#define m_ActionList_offset		view_as<Address>(0x14)
 
 
 // CEventAction
-#define m_iTarget_offset        view_as<Address>(0x00)
-#define m_iTargetInput_offset   view_as<Address>(0x04)
-#define m_iParameter_offset     view_as<Address>(0x08)
-#define m_flDelay_offset        view_as<Address>(0x0C)
-#define m_nTimesToFire_offset   view_as<Address>(0x10)
-#define m_iIDStamp_offset       view_as<Address>(0x14)
-#define m_pNext_offset          view_as<Address>(0x18)
+#define m_iTarget_offset		view_as<Address>(0x00)
+#define m_iTargetInput_offset	view_as<Address>(0x04)
+#define m_iParameter_offset		view_as<Address>(0x08)
+#define m_flDelay_offset		view_as<Address>(0x0C)
+#define m_nTimesToFire_offset	view_as<Address>(0x10)
+#define m_iIDStamp_offset		view_as<Address>(0x14)
+#define m_pNext_offset			view_as<Address>(0x18)
 
 
 enum
@@ -73,7 +73,7 @@ enum
 	FIELD_INTERVAL,			// a start and range floating point interval ( e.g., 3.2->3.6 == 3.2 and 0.4 )
 	FIELD_MODELINDEX,		// a model index
 	FIELD_MATERIALINDEX,	// a material index (using the material precache string table)
-	
+
 	FIELD_VECTOR2D,			// 2 floats
 
 	FIELD_TYPECOUNT,		// MUST BE LAST
@@ -85,10 +85,10 @@ Handle g_hGetDataDescMap;
 public Plugin myinfo =
 {
 	name		= "OutputInfo",
-	author		= "Dolly (Credits to Botox & Addie)",
+	author		= "Botox, Addie, Dolly, .Rushaway)",
 	description	= "Read entity outputs",
-	version		= "1.0.0",
-	url			= "https://nide.gg"	
+	version		= "1.0.1",
+	url			= "https://nide.gg"
 };
 
 public APLRes AskPluginLoad2(Handle myPlugin, bool late, char[] error, int err_max)
@@ -116,10 +116,7 @@ int Native_GetOutputCount(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -131,20 +128,14 @@ int Native_GetOutputTarget(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	int maxlen = GetNativeCell(5);
 
@@ -153,9 +144,7 @@ int Native_GetOutputTarget(Handle plugin, int params)
 
 	int len = GetOutputTarget(entity, output, index, target, maxlen);
 	if (len)
-	{
 		SetNativeString(4, target, maxlen);
-	}
 
 	return len;
 }
@@ -164,20 +153,14 @@ int Native_GetOutputTargetInput(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	int maxlen = GetNativeCell(5);
 
@@ -186,9 +169,7 @@ int Native_GetOutputTargetInput(Handle plugin, int params)
 
 	int len = GetOutputTargetInput(entity, output, index, targetInput, maxlen);
 	if (len)
-	{
 		SetNativeString(4, targetInput, maxlen);
-	}
 
 	return len;
 }
@@ -197,20 +178,14 @@ int Native_GetOutputParameter(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	int maxlen = GetNativeCell(5);
 
@@ -219,9 +194,7 @@ int Native_GetOutputParameter(Handle plugin, int params)
 
 	int len = GetOutputParameter(entity, output, index, parameter, maxlen);
 	if (len)
-	{
 		SetNativeString(4, parameter, maxlen);
-	}
 
 	return len;
 }
@@ -230,20 +203,14 @@ any Native_GetOutputDelay(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	return GetOutputDelay(entity, output, index);
 }
@@ -252,20 +219,14 @@ int Native_GetOutputRefires(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	return GetOutputRefires(entity, output, index);
 }
@@ -274,10 +235,7 @@ int Native_GetOutputValue(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -289,10 +247,7 @@ any Native_GetOutputValueFloat(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -304,10 +259,7 @@ int Native_GetOutputValueString(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -319,10 +271,8 @@ int Native_GetOutputValueString(Handle plugin, int params)
 
 	int len = GetOutputValueString(entity, output, value, maxlen);
 	if (len)
-	{
 		SetNativeString(3, value, maxlen);
-	}
-	
+
 	return len;
 }
 
@@ -330,10 +280,7 @@ int Native_GetOutputValueVector(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -343,10 +290,8 @@ int Native_GetOutputValueVector(Handle plugin, int params)
 
 	int res = view_as<int>(GetOutputValueFloat(entity, output, true, value));
 	if (res)
-	{
 		SetNativeArray(3, value, sizeof(value));
-	}
-	
+
 	return res;
 }
 
@@ -354,20 +299,14 @@ int Native_FindOutput(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int startIndex = GetNativeCell(3);
 	if (startIndex < 0)
-	{
-		ThrowError("StartIndex '%d' is invalid.", startIndex);
-		return 0;
-	}
+		return ThrowNativeError(0, "StartIndex '%d' is invalid.", startIndex);
 
 	char target[256];
 	GetNativeString(4, target, sizeof(target));
@@ -388,10 +327,7 @@ int Native_DeleteOutput(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -405,10 +341,7 @@ int Native_DeleteAllOutputs(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
@@ -420,20 +353,14 @@ int Native_GetOutputFormatted(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	char output[256];
 	GetNativeString(2, output, sizeof(output));
 
 	int index = GetNativeCell(3);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	int maxlen = GetNativeCell(5);
 
@@ -442,9 +369,7 @@ int Native_GetOutputFormatted(Handle plugin, int params)
 
 	int len = GetOutputFormatted(entity, output, index, formatted, maxlen);
 	if (len)
-	{
 		SetNativeString(4, formatted, maxlen);
-	}
 
 	return len;
 }
@@ -453,17 +378,11 @@ int Native_GetOutputNames(Handle plugin, int params)
 {
 	int entity = GetNativeCell(1);
 	if (!IsValidEntity(entity))
-	{
-		ThrowError("Entity '%d' is invalid.", entity);
-		return 0;
-	}
+		return ThrowNativeError(0, "Entity '%d' is invalid.", entity);
 
 	int index = GetNativeCell(2);
 	if (index < 0)
-	{
-		ThrowError("Index '%d' is invalid.", index);
-		return 0;
-	}
+		return ThrowNativeError(0, "Index '%d' is invalid.", index);
 
 	int maxlen = GetNativeCell(4);
 
@@ -472,9 +391,7 @@ int Native_GetOutputNames(Handle plugin, int params)
 
 	int len = GetOutputNames(entity, index, output, maxlen);
 	if (len)
-	{
 		SetNativeString(3, output, maxlen);
-	}
 
 	return len;
 }
@@ -512,6 +429,25 @@ public void OnPluginStart()
 	}
 }
 
+Address GetActionAtIndex(Address outputAddr, int index)
+{
+	Address actionList = GetOutputActionList(outputAddr);
+	if (!actionList)
+		return Address_Null;
+
+	int count = 0;
+	while (actionList)
+	{
+		if (count == index)
+			return actionList;
+
+		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
+		count++;
+	}
+
+	return Address_Null;
+}
+
 Address GetOutputAddress(int entity, const char[] output)
 {
 	int outputOffset = FindDataMapInfo(entity, output);
@@ -521,7 +457,7 @@ Address GetOutputAddress(int entity, const char[] output)
 	Address outputAddr = GetEntityAddress(entity) + view_as<Address>(outputOffset);
 	if (!outputAddr)
 		return view_as<Address>(0x0);
-	
+
 	return outputAddr;
 }
 
@@ -556,24 +492,12 @@ int GetOutputTarget(int entity, const char[] output, int index, char[] target, i
 	if (!outputAddr)
 		return 0;
 
-	Address actionList = GetOutputActionList(outputAddr);
-	if (!actionList)
+	Address action = GetActionAtIndex(outputAddr, index);
+	if (!action)
 		return 0;
 
-	int count = 0;
-	while (actionList)
-	{
-		if (count == index)
-		{
-			Address m_iTarget = LoadFromAddress(actionList + m_iTarget_offset, NumberType_Int32);
-			return StringtToCharArray(m_iTarget, target, maxlen, true);
-		}
-
-		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
-		count++;
-	}
-
-	return 0;
+	Address m_iTarget = LoadFromAddress(action + m_iTarget_offset, NumberType_Int32);
+	return StringtToCharArray(m_iTarget, target, maxlen, true);
 }
 
 int GetOutputTargetInput(int entity, const char[] output, int index, char[] targetInput, int maxlen)
@@ -582,24 +506,12 @@ int GetOutputTargetInput(int entity, const char[] output, int index, char[] targ
 	if (!outputAddr)
 		return 0;
 
-	Address actionList = GetOutputActionList(outputAddr);
-	if (!actionList)
+	Address action = GetActionAtIndex(outputAddr, index);
+	if (!action)
 		return 0;
 
-	int count = 0;
-	while (actionList)
-	{
-		if (count == index)
-		{
-			Address m_iTargetInput = LoadFromAddress(actionList + m_iTargetInput_offset, NumberType_Int32);
-			return StringtToCharArray(m_iTargetInput, targetInput, maxlen, true);
-		}
-
-		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
-		count++;
-	}
-
-	return 0;
+	Address m_iTargetInput = LoadFromAddress(action + m_iTargetInput_offset, NumberType_Int32);
+	return StringtToCharArray(m_iTargetInput, targetInput, maxlen, true);
 }
 
 int GetOutputParameter(int entity, const char[] output, int index, char[] parameter, int maxlen)
@@ -608,24 +520,12 @@ int GetOutputParameter(int entity, const char[] output, int index, char[] parame
 	if (!outputAddr)
 		return 0;
 
-	Address actionList = GetOutputActionList(outputAddr);
-	if (!actionList)
+	Address action = GetActionAtIndex(outputAddr, index);
+	if (!action)
 		return 0;
 
-	int count = 0;
-	while (actionList)
-	{
-		if (count == index)
-		{
-			Address m_iParameter = LoadFromAddress(actionList + m_iParameter_offset, NumberType_Int32);
-			return StringtToCharArray(m_iParameter, parameter, maxlen, true);
-		}
-
-		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
-		count++;
-	}
-
-	return 0;
+	Address m_iParameter = LoadFromAddress(action + m_iParameter_offset, NumberType_Int32);
+	return StringtToCharArray(m_iParameter, parameter, maxlen, true);
 }
 
 float GetOutputDelay(int entity, const char[] output, int index)
@@ -634,21 +534,11 @@ float GetOutputDelay(int entity, const char[] output, int index)
 	if (!outputAddr)
 		return -1.0;
 
-	Address actionList = GetOutputActionList(outputAddr);
-	if (!actionList)
+	Address action = GetActionAtIndex(outputAddr, index);
+	if (!action)
 		return -1.0;
 
-	int count = 0;
-	while (actionList)
-	{
-		if (count == index)
-			return view_as<float>(LoadFromAddress(actionList + m_flDelay_offset, NumberType_Int32));
-
-		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
-		count++;
-	}
-
-	return -1.0;
+	return view_as<float>(LoadFromAddress(action + m_flDelay_offset, NumberType_Int32));
 }
 
 int GetOutputRefires(int entity, const char[] output, int index)
@@ -657,21 +547,11 @@ int GetOutputRefires(int entity, const char[] output, int index)
 	if (!outputAddr)
 		return 0;
 
-	Address actionList = GetOutputActionList(outputAddr);
-	if (!actionList)
+	Address action = GetActionAtIndex(outputAddr, index);
+	if (!action)
 		return 0;
 
-	int count = 0;
-	while (actionList)
-	{
-		if (count == index)
-			return view_as<int>(LoadFromAddress(actionList + m_nTimesToFire_offset, NumberType_Int32));
-
-		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
-		count++;
-	}
-
-	return 0;
+	return LoadFromAddress(action + m_nTimesToFire_offset, NumberType_Int32);
 }
 
 int GetOutputValue(int entity, const char[] output)
@@ -683,7 +563,7 @@ int GetOutputValue(int entity, const char[] output)
 	int fieldType = LoadFromAddress(outputAddr + fieldType_var_offset, NumberType_Int32);
 	switch (fieldType)
 	{
-		case 
+		case
 			FIELD_TICK,
 			FIELD_MODELINDEX,
 			FIELD_MATERIALINDEX,
@@ -710,7 +590,7 @@ float GetOutputValueFloat(int entity, const char[] output, bool isVector = false
 	int fieldType = LoadFromAddress(outputAddr + fieldType_var_offset, NumberType_Int32);
 	switch (fieldType)
 	{
-		case 
+		case
 			FIELD_FLOAT,
 			FIELD_TIME:
 		{
@@ -742,11 +622,7 @@ int GetOutputValueString(int entity, const char[] output, char[] value, int maxl
 	int fieldType = LoadFromAddress(outputAddr + fieldType_var_offset, NumberType_Int32);
 	switch (fieldType)
 	{
-		case 
-			FIELD_CHARACTER,
-	 		FIELD_STRING,
-	 		FIELD_MODELNAME,
-		 	FIELD_SOUNDNAME:
+		case FIELD_CHARACTER, FIELD_STRING, FIELD_MODELNAME, FIELD_SOUNDNAME:
 		{
 			return StringtToCharArray(LoadFromAddress(outputAddr + Union_Val_offset, NumberType_Int32), value, maxlen, true);
 		}
@@ -756,14 +632,7 @@ int GetOutputValueString(int entity, const char[] output, char[] value, int maxl
 	return 0;
 }
 
-int FindOutput(int entity,
-				const char[] output,
-				int startIndex,
-				const char[] target = "",
-				const char[] targetInput = "",
-				const char[] parameter = "",
-				float delay = -1.0,
-				int timesToFire = 0)
+int FindOutput(int entity, const char[] output, int startIndex, const char[] target = "", const char[] targetInput = "", const char[] parameter = "", float delay = -1.0, int timesToFire = 0)
 {
 	Address outputAddr = GetOutputAddress(entity, output);
 	if (!outputAddr)
@@ -789,18 +658,18 @@ int FindOutput(int entity,
 		if (target[0])
 		{
 			Address m_iTarget = oldActionList + m_iTarget_offset;
-	
+
 			char thisTarget[64];
 			StringtToCharArray(m_iTarget, thisTarget, sizeof(thisTarget), true);
 
 			if (strcmp(target, thisTarget) != 0)
 				continue;
 		}
-		
+
 		if (targetInput[0])
 		{
 			Address m_iTargetInput = oldActionList + m_iTargetInput_offset;
-	
+
 			char thisTargetInput[64];
 			StringtToCharArray(m_iTargetInput, thisTargetInput, sizeof(thisTargetInput), true);
 
@@ -811,7 +680,7 @@ int FindOutput(int entity,
 		if (parameter[0])
 		{
 			Address m_iParameter = oldActionList + m_iParameter_offset;
-	
+
 			char thisParameter[256];
 			StringtToCharArray(m_iParameter, thisParameter, sizeof(thisParameter), true);
 
@@ -923,53 +792,24 @@ int GetOutputFormatted(int entity, const char[] output, int index, char[] format
 	if (!outputAddr)
 		return 0;
 
-	Address actionList = GetOutputActionList(outputAddr);
-	if (!actionList)
+	Address action = GetActionAtIndex(outputAddr, index);
+	if (!action)
 		return 0;
 
-	int count = 0;
-	while (actionList)
-	{
-		if (count == index)
-		{
-			Address m_iTarget = LoadFromAddress(actionList + m_iTarget_offset, NumberType_Int32);
-	
-			char thisTarget[64];
-			StringtToCharArray(m_iTarget, thisTarget, sizeof(thisTarget), true);
+	char thisTarget[64];
+	StringtToCharArray(LoadFromAddress(action + m_iTarget_offset, NumberType_Int32), thisTarget, sizeof(thisTarget), true);
 
-			Address m_iTargetInput = LoadFromAddress(actionList + m_iTargetInput_offset, NumberType_Int32);
+	char thisTargetInput[64];
+	StringtToCharArray(LoadFromAddress(action + m_iTargetInput_offset, NumberType_Int32), thisTargetInput, sizeof(thisTargetInput), true);
 
-			char thisTargetInput[64];
-			StringtToCharArray(m_iTargetInput, thisTargetInput, sizeof(thisTargetInput), true);
+	char thisParameter[256];
+	StringtToCharArray(LoadFromAddress(action + m_iParameter_offset, NumberType_Int32), thisParameter, sizeof(thisParameter), true);
 
-			Address m_iParameter = LoadFromAddress(actionList + m_iParameter_offset, NumberType_Int32);
+	float thisDelay = view_as<float>(LoadFromAddress(action + m_flDelay_offset, NumberType_Int32));
+	int thisTimesToFire = LoadFromAddress(action + m_nTimesToFire_offset, NumberType_Int32);
 
-			char thisParameter[256];
-			StringtToCharArray(m_iParameter, thisParameter, sizeof(thisParameter), true);
-
-			Address m_flDelay = actionList + m_flDelay_offset;
-
-			float thisDelay = LoadFromAddress(m_flDelay, NumberType_Int32);
-
-			Address m_nTimesToFire = actionList + m_nTimesToFire_offset;
-
-			int thisTimesToFire = LoadFromAddress(m_nTimesToFire, NumberType_Int32);
-
-			return FormatEx(
-				formatted, maxlen, "%s,%s,%s,%f,%d",
-				thisTarget,
-				thisTargetInput,
-				thisParameter,
-				thisDelay,
-				thisTimesToFire
-			);
-		}
-
-		actionList = LoadFromAddress(actionList + m_pNext_offset, NumberType_Int32);
-		count++;
-	}
-
-	return 0;
+	return FormatEx(formatted, maxlen, "%s,%s,%s,%f,%d",
+		thisTarget, thisTargetInput, thisParameter, thisDelay, thisTimesToFire);
 }
 
 int GetOutputNames(int entity, int index, char[] output, int maxlen)

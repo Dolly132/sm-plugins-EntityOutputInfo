@@ -563,15 +563,7 @@ int GetOutputValue(int entity, const char[] output)
 	int fieldType = LoadFromAddress(outputAddr + fieldType_var_offset, NumberType_Int32);
 	switch (fieldType)
 	{
-		case
-			FIELD_TICK,
-			FIELD_MODELINDEX,
-			FIELD_MATERIALINDEX,
-			FIELD_INTEGER,
-			FIELD_COLOR32,
-			FIELD_SHORT,
-			FIELD_CHARACTER,
-			FIELD_BOOLEAN:
+		case FIELD_TICK, FIELD_MODELINDEX, FIELD_MATERIALINDEX, FIELD_INTEGER, FIELD_COLOR32, FIELD_SHORT, FIELD_CHARACTER, FIELD_BOOLEAN:
 		{
 			return LoadFromAddress(outputAddr + Union_Val_offset, NumberType_Int32);
 		}
@@ -590,9 +582,7 @@ float GetOutputValueFloat(int entity, const char[] output, bool isVector = false
 	int fieldType = LoadFromAddress(outputAddr + fieldType_var_offset, NumberType_Int32);
 	switch (fieldType)
 	{
-		case
-			FIELD_FLOAT,
-			FIELD_TIME:
+		case FIELD_FLOAT, FIELD_TIME:
 		{
 			if (!isVector)
 			{

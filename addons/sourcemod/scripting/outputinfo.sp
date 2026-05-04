@@ -357,7 +357,7 @@ int Native_GetOutputNames(Handle plugin, int params)
 	int len = GetOutputNames(entity, index, output, maxlen);
 	if (len)
 	{
-		SetNativeString(4, output, maxlen);
+		SetNativeString(3, output, maxlen);
 	}
 
 	return len;

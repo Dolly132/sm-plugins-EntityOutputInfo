@@ -86,8 +86,8 @@ public Plugin myinfo =
 	name		= "OutputInfo",
 	author		= "Botox, Addie, Dolly, .Rushaway",
 	description	= "Read entity outputs",
-	version		= "1.0.1",
-	url			= "https://nide.gg"
+	version		= "1.1.0",
+	url			= "https://github.com/srcdslab"
 };
 
 public APLRes AskPluginLoad2(Handle myPlugin, bool late, char[] error, int err_max)

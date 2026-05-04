@@ -86,7 +86,7 @@ public Plugin myinfo =
 	name		= "Entity Output Info",
 	author		= "Botox, Addie, Dolly, .Rushaway",
 	description	= "Advanced entity output manipulation API",
-	version		= "1.2.0",
+	version		= "1.2.1",
 	url			= "https://github.com/srcdslab"
 };
 
@@ -430,24 +430,14 @@ public void OnPluginStart()
 	}
 }
 
-void GetEntityName(int entity, char[] buffer, int maxlen)
+char[] GetEntityName(int entity)
 {
-	int offset = FindDataMapInfo(entity, "m_iName");
-	if (offset != -1)
-	{
-		Address nameAddr = GetEntityAddress(entity) + view_as<Address>(offset);
-		Address strPtr = LoadFromAddress(nameAddr, NumberType_Int32);
+	char name[64];
+	GetEntPropString(entity, Prop_Data, "m_iName", name, sizeof(name));
+	if (name[0] == '\0')
+		FormatEx(name, sizeof(name), "#%d", EntIndexToEntRef(entity));
 
-		if (strPtr != Address_Null)
-		{
-			StringtToCharArray(strPtr, buffer, maxlen, true);
-			if (buffer[0] != '\0')
-				return;
-		}
-	}
-
-	int ref = EntIndexToEntRef(entity);
-	FormatEx(buffer, maxlen, "#%d", ref);
+	return name;
 }
 
 Address GetActionAtIndex(Address outputAddr, int index)
@@ -590,9 +580,7 @@ int GetOutputValue(int entity, const char[] output)
 		}
 	}
 
-	char entityName[64];
-	GetEntityName(entity, entityName, sizeof(entityName));
-	ThrowError("Entity '%s': %s value is not an integer (%d)", entityName, output, fieldType);
+	ThrowError("Entity '%s': %s value is not an integer (%d)", GetEntityName(entity), output, fieldType);
 	return 0;
 }
 
@@ -622,9 +610,7 @@ float GetOutputValueFloat(int entity, const char[] output, bool isVector = false
 		}
 	}
 
-	char entityName[64];
-	GetEntityName(entity, entityName, sizeof(entityName));
-	ThrowError("Entity '%s': %s value is not a float (%d)", entityName, output, fieldType);
+	ThrowError("Entity '%s': %s value is not a float (%d)", GetEntityName(entity), output, fieldType);
 	return 0.0;
 }
 
@@ -643,9 +629,7 @@ int GetOutputValueString(int entity, const char[] output, char[] value, int maxl
 		}
 	}
 
-	char entityName[64];
-	GetEntityName(entity, entityName, sizeof(entityName));
-	ThrowError("Entity '%s': %s value is not a string (%d)", entityName, output, fieldType);
+	ThrowError("Entity '%s': %s value is not a string (%d)", GetEntityName(entity), output, fieldType);
 	return 0;
 }
 
